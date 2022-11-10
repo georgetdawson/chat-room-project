@@ -1,0 +1,5 @@
+DEBUG:root:This is a harmless debug message.
+INFO:root:Just some useful info.
+WARNING:root:I'm sorry, but I can't do that, Dave.
+ERROR:root:Did you just try to divide by zero?
+CRITICAL:root:The entire internet is down!!
