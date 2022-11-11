@@ -20,3 +20,8 @@ logger.debug("importing socket and threading")
 
 import socket
 import threading
+
+#Port and server variables
+logger.debug ("port and server variables")
+
+PORT = 6450
