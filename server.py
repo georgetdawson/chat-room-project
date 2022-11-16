@@ -52,7 +52,7 @@ def main():
 #Server program has started message
 logger.debug ("server program has started message.")
 
-        print("Server Program has started..")
+        print("Server has started..")
         main()
         
 
