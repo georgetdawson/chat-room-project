@@ -24,5 +24,8 @@ import threading
 #Port and server variables
 logger.debug ("port and server variables")
 
-PORT = 0000
-SERVER = '000.0.0.0'
+PORT = 6450
+SERVER = socket.gethostbyname(socket.gethostname())
+PRINT = (SERVER)
+
+
