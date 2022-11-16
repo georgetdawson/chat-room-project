@@ -28,4 +28,34 @@ PORT = 6450
 SERVER = socket.gethostbyname(socket.gethostname())
 PRINT = (SERVER)
 
+ADDR = (SERVER,PORT)
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(ADDR)
+
+#Incoming clients 
+logger.debug ("incoming clients")
+
+def incoming_clients(conn, addr):
+    pass
+
+def main():
+    server.listen()
+    print(f'Server has started listening for clients on (SERVER)...')
+    while True: 
+        conn, addr = server.accept()
+        thread = threading.Thread(target=incoming_clients,args=(conn,addr))
+        thread.start()
+        print(f'No of clients that are connected: {threading.activeCount() -1}')
+        server.close()
+
+#Server program has started message
+logger.debug ("server program has started message.")
+
+        print("Server Program has started..")
+        main()
+        
+
+
+
 
