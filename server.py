@@ -24,11 +24,13 @@ import threading
 #Port and server variables
 logger.debug ("port and server variables")
 
+HEADER = 64
 PORT = 6450
 SERVER = socket.gethostbyname(socket.gethostname())
 PRINT = (SERVER)
 
 ADDR = (SERVER,PORT)
+FORMAT = 'utf-8'
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
@@ -37,7 +39,19 @@ server.bind(ADDR)
 logger.debug ("incoming clients")
 
 def incoming_clients(conn, addr):
-    pass
+    print(f"New connection established for {addr}")
+    connected = True
+    while connected:
+        msg_length = conn.recv(HEADER).decode(FORMAT)
+        if msg_length:
+            msg_length = int(msg_length)
+            msg = conn.recv(msg_length).decode(FORMAT)
+            print(f"{addr} sent {msg}")
+            conn.send("MSG RECEIVED".encode(FORMAT))
+            if msg == "#DISCONNECT":
+                connected = False
+
+    conn.close()
 
 def main():
     server.listen()
@@ -52,6 +66,5 @@ def main():
 #Server program has started message
 logger.debug ("server program has started message.")
 
-        print("Server has started..")
-        main()
-        
+print("Server has started..")
+main()
