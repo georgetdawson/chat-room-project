@@ -60,7 +60,7 @@ def client_main():
             connected = False
             break
         send_msg(message)
-        send(DISCONNECT_MSG)
+    send(DISCONNECT_MSG)
 
-        client_main()
+client_main()
 
