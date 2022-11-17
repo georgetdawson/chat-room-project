@@ -46,7 +46,7 @@ def incoming_clients(conn, addr):
         if msg_length:
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
-            print(f"{addr} sent {msg}")
+            print(f"{addr} sent: {msg}")
             conn.send("MSG RECEIVED".encode(FORMAT))
             if msg == "#DISCONNECT":
                 connected = False

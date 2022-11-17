@@ -5,4 +5,3 @@ ERROR:root:Did you just try to divide by zero?
 CRITICAL:root:The entire internet is down!!
 DEBUG:root:Defining header, server, port and disconnect message
 DEBUG:root:configuring address and format
-DEBUG:root:defining client
