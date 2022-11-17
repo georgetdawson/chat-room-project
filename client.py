@@ -2,7 +2,7 @@ import logging
 
 #Create and configure logger
 LOG_FORMAT = "%(Levelname)s %(asctime)s - %(message)s"
-logging.basicConfig(filename = "C:\\Users\George\Documents\coding\chat-room-python\logfile.log",
+logging.basicConfig(filename = "C:\\Users\George\Documents\coding\chat-room-python\logfileclient.log",
                     level = logging.DEBUG,
                     filemode = 'w')
                     
