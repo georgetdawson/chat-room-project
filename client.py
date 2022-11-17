@@ -34,7 +34,7 @@ ADDR = (SERVER,PORT)
 FORMAT = 'utf-8'
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.bind(ADDR)
+client.connect(ADDR)
 
 
 def send_msg(msg):
