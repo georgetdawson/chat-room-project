@@ -2,7 +2,7 @@ import logging
 
 #Create and configure logger
 LOG_FORMAT = "%(Levelname)s %(asctime)s - %(message)s"
-logging.basicConfig(filename = "C:\\Users\George\Documents\coding\chat-room-python\logfileclient.log",
+logging.basicConfig(filename = "C:\\Users\George\Documents\coding\chat-room-python\logfile.log",
                     level = logging.DEBUG,
                     filemode = 'w')
                     
@@ -18,49 +18,30 @@ logger.critical("The entire internet is down!!")
 import socket
 import threading
 
-#Defining header, server, port and disconnect message
-logger.debug ("Defining header, server, port and disconnect message")
-
-HEADER = 64
-PORT = 6450
-SERVER = SERVER = socket.gethostbyname(socket.gethostname())
-PRINT = (SERVER)
-DISCONNECT_MSG = '#DISCONNECT'
-
-# configuring address and format
-logger.debug ("configuring address and format")
-
-ADDR = (SERVER,PORT)
-FORMAT = 'utf-8'
-
+alias = input('Choose an alias >>> ')
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(ADDR)
+client.connect(('127.0.0.1', 6450))
 
-
-def send_msg(msg):
-    message = msg.encode(FORMAT)
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
-    send_length+=b' '*(HEADER-len(send_length))
-    client.send(send_length)
-    client.send(message)
-    print(client.recv(2048).decode(FORMAT))
-
-
-
-#defining client
-logger.debug ("defining client")
-
-def client_main():
-    connected = True
-    send_msg("Connection has been established")
-    while connected: 
-        message = input("MSG: ")
-        if message == 'disconnect':
-            connected = False
+def client_receive():
+    while True:
+        try:
+            message = client.recv(1024).decode('utf-8')
+            if message == "alias?":
+                client.send(alias.encode('utf-8'))
+            else:
+                print(message)
+        except:
+            print('Error!')
+            client.close()
             break
-        send_msg(message)
-    send(DISCONNECT_MSG)
 
-client_main()
+def client_send():
+    while True:
+        message = f'{alias}: {input("")}'
+        client.send(message.encode('utf-8'))
 
+receive_thread = threading.Thread(target=client_receive)
+receive_thread.start()
+
+send_thread = threading.Thread(target=client_send)
+send_thread.start()

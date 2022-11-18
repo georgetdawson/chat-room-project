@@ -24,47 +24,48 @@ import threading
 #Port and server variables
 logger.debug ("port and server variables")
 
-HEADER = 64
-PORT = 6450
-SERVER = socket.gethostbyname(socket.gethostname())
-PRINT = (SERVER)
-
-ADDR = (SERVER,PORT)
-FORMAT = 'utf-8'
-
+port = 6450
+host = '127.0.0.1'
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
+server.bind((host, port))
+server.listen()
+clients = []
+aliases = []
 
-#Incoming clients 
-logger.debug ("incoming clients")
+def broadcast(message):
+    for client in clients:
+        client.send(message)
 
-def incoming_clients(conn, addr):
-    print(f"New connection established for {addr}")
-    connected = True
-    while connected:
-        msg_length = conn.recv(HEADER).decode(FORMAT)
-        if msg_length:
-            msg_length = int(msg_length)
-            msg = conn.recv(msg_length).decode(FORMAT)
-            print(f"{addr} sent: {msg}")
-            conn.send("MSG RECEIVED".encode(FORMAT))
-            if msg == "#DISCONNECT":
-                connected = False
+def handle_client(client):
+    while True:
+        try:
+            message = client.recv(1024)
+            broadcast(message)
+        except:
+            index = clients.index(client)
+            clients.remove(client)
+            clients.close()
+            alias = aliases[index]
+            broadcast(f'{alias} has left the chat room!'.encode('utf-8'))
+            aliases.remove(alias)
+            break
 
-    conn.close()
+# Main function to receive the clients connection
+def receive():
+    while True:
+            print('Server is running ....')
+            client,address = server.accept()
+            print(f'connection is established with {str(address)}')
+            client.send('alias?'.encode('utf-8'))
+            alias = client.recv(1024)
+            aliases.append(alias)
+            clients.append(client)
+            print(f'The alias of this client is {alias}'.encode('utf-8'))
+            broadcast(f'{alias} has connected to the chat room'.encode('utf-8'))
+            client.send('you are now connected!'.encode('utf-8'))
+            thread = threading.Thread(target = handle_client, args=(client,))
+            thread.start()
 
-def main():
-    server.listen()
-    print(f'Server has started listening for clients on (SERVER)...')
-    while True: 
-        conn, addr = server.accept()
-        thread = threading.Thread(target=incoming_clients,args=(conn,addr))
-        thread.start()
-        print(f'No of clients that are connected: {threading.activeCount() -1}')
-        server.close()
 
-#Server program has started message
-logger.debug ("server program has started message.")
-
-print("Server has started..")
-main()
+if __name__ == "__main__":
+    receive()
