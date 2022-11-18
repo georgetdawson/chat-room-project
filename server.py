@@ -29,11 +29,11 @@ PORT = 6450
 SERVER = socket.gethostbyname(socket.gethostname())
 PRINT = (SERVER)
 
-ADDR = (SERVER,PORT)
+addr = (SERVER,PORT)
 FORMAT = 'utf-8'
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
+server.bind(addr)
 
 #Incoming clients 
 logger.debug ("incoming clients")
@@ -43,13 +43,13 @@ def incoming_clients(conn, addr):
     connected = True
     while connected:
         msg_length = conn.recv(HEADER).decode(FORMAT)
-        if msg_length:
-            msg_length = int(msg_length)
-            msg = conn.recv(msg_length).decode(FORMAT)
-            print(f"{addr} sent: {msg}")
-            conn.send("MSG RECEIVED".encode(FORMAT))
-            if msg == "#DISCONNECT":
-                connected = False
+    if msg_length:
+        msg_length = int(msg_length)
+        msg = conn.recv(msg_length).decode(FORMAT)
+        print(f"{addr} sent: {msg}")
+        conn.send("MSG RECEIVED".encode(FORMAT))
+    if msg == "#DISCONNECT":
+        connected = False
 
     conn.close()
 
@@ -61,7 +61,7 @@ def main():
         thread = threading.Thread(target=incoming_clients,args=(conn,addr))
         thread.start()
         print(f'No of clients that are connected: {threading.activeCount() -1}')
-        server.close()
+server.close()
 
 #Server program has started message
 logger.debug ("server program has started message.")

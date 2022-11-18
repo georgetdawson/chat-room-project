@@ -56,10 +56,10 @@ def client_main():
     send_msg("Connection has been established")
     while connected: 
         message = input("MSG: ")
-        if message == 'disconnect':
-            connected = False
-            break
-        send_msg(message)
+    if message == 'disconnect':
+        connected = False
+    
+    send_msg(message)
     send(DISCONNECT_MSG)
 
 client_main()
